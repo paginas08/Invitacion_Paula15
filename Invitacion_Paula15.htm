@@ -553,33 +553,33 @@
    <!-- ===== AUDIO DE FONDO ===== -->
 <audio id="musicaFondo" autoplay controls loop playsinline></audio>
 <script>
-    // UNE EL BASE64 EN UN SOLO STRING
-    const base64Audio = audioParts.join("");
+    const music = document.getElementById('musicaFondo');
 
-    // ASIGNA AL AUDIO
-    const music = document.getElementById("musicaFondo");
-    music.src = "data:audio/mpeg;base64," + base64Audio;
+    // Configuración obligatoria
     music.volume = 1.0;
+    music.autoplay = true;
+    music.loop = true;
 
-    // AUTOPLAY FORZADO
-    const intentarPlay = () => {
-        music.play()
-            .then(() => {
-                document.removeEventListener("click", intentarPlay);
-                document.removeEventListener("touchstart", intentarPlay);
-                document.removeEventListener("keydown", intentarPlay);
-            })
-            .catch(() => {});
-    };
+    // Intento agresivo de autoplay apenas cargue
+    window.addEventListener('load', () => {
+        const intentarPlay = () => {
+            music.play().then(() => {
+                // Si logró reproducir, quitamos listeners forzados
+                document.removeEventListener('click', intentarPlay);
+                document.removeEventListener('touchstart', intentarPlay);
+                document.removeEventListener('keydown', intentarPlay);
+            }).catch(() => {});
+        };
 
-    window.addEventListener("load", intentarPlay);
-    document.addEventListener("click", intentarPlay);
-    document.addEventListener("touchstart", intentarPlay);
-    document.addEventListener("keydown", intentarPlay);
+        // Disparo inmediato
+        intentarPlay();
 
-    
+        // Fuerza si el navegador bloquea
+        document.addEventListener('click', intentarPlay);
+        document.addEventListener('touchstart', intentarPlay);
+        document.addEventListener('keydown', intentarPlay);
+    });
 </script>
-
 
 
 
@@ -1054,6 +1054,5 @@ document.getElementById("musicaFondo").src = audioSrc;
 </body>
 
 </html>
-
 
 
