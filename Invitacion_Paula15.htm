@@ -551,35 +551,35 @@
                 solo tu compañía para hacerla inolvidable. </p>
 
    <!-- ===== AUDIO DE FONDO ===== -->
-<audio id="musicaFondo" autoplay></audio>
+<audio id="musicaFondo" autoplay controls loop playsinline></audio>
 <script>
-    const music = document.getElementById('musicaFondo');
+    // UNE EL BASE64 EN UN SOLO STRING
+    const base64Audio = audioParts.join("");
 
-    // Configuración obligatoria
+    // ASIGNA AL AUDIO
+    const music = document.getElementById("musicaFondo");
+    music.src = "data:audio/mpeg;base64," + base64Audio;
     music.volume = 1.0;
-    music.autoplay = true;
-    music.loop = true;
 
-    // Intento agresivo de autoplay apenas cargue
-    window.addEventListener('load', () => {
-        const intentarPlay = () => {
-            music.play().then(() => {
-                // Si logró reproducir, quitamos listeners forzados
-                document.removeEventListener('click', intentarPlay);
-                document.removeEventListener('touchstart', intentarPlay);
-                document.removeEventListener('keydown', intentarPlay);
-            }).catch(() => {});
-        };
+    // AUTOPLAY FORZADO
+    const intentarPlay = () => {
+        music.play()
+            .then(() => {
+                document.removeEventListener("click", intentarPlay);
+                document.removeEventListener("touchstart", intentarPlay);
+                document.removeEventListener("keydown", intentarPlay);
+            })
+            .catch(() => {});
+    };
 
-        // Disparo inmediato
-        intentarPlay();
+    window.addEventListener("load", intentarPlay);
+    document.addEventListener("click", intentarPlay);
+    document.addEventListener("touchstart", intentarPlay);
+    document.addEventListener("keydown", intentarPlay);
 
-        // Fuerza si el navegador bloquea
-        document.addEventListener('click', intentarPlay);
-        document.addEventListener('touchstart', intentarPlay);
-        document.addEventListener('keydown', intentarPlay);
-    });
+    
 </script>
+
 
 
 
@@ -1055,7 +1055,5 @@ document.getElementById("musicaFondo").src = audioSrc;
 
 </html>
 
-
-</html>
 
 
